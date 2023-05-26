@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.regimg {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.headerreglog {
+    font-family: 'Nunito', sans-serif;
+}
+
+.regContainer {
+    width: 50%;
+    margin-left: auto;
+    margin-top: 50%;
+    transform: translateY(-50%);
+}
+
+.regInput {
+    margin: 20px 0;
+
+}
+
+.regInput .MuiTextField-root {
+    width: 80%;
+}
+
+.btnsl {
+    width: 80%;
+}
+
+.google{
+    width: 30%;
+    margin-top: 20px;
+    cursor: pointer;
+}
