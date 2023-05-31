@@ -1,9 +1,57 @@
-import React from 'react'
-import { Grid, TextField, Button } from '@mui/material';
+import React, { useState } from 'react'
+import { Grid, TextField, Button, Alert } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
 import regimg from "../assets/regimg.png"
 import Headingforreglog from '../components/Headingforreglog';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+let initialValues = {
+    email: "",
+    fullName: "",
+    password: "",
+    loading: false,
+}
 
 const Registration = () => {
+
+    const auth = getAuth();
+
+    let navigate = useNavigate();
+
+    let [values, setValues] = useState(initialValues)
+
+    let handleValues = (e) => {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    let handleSubmit = () => {
+        let { email, password, fullName } = values
+        setValues({
+            ...values,
+            loading: true,
+        })
+        createUserWithEmailAndPassword(auth, email, password).then(() => {
+            sendEmailVerification(auth.currentUser)
+                .then(() => {
+                    console.log("Email send")
+                });
+            setValues({
+                email: "",
+                fullName: "",
+                password: "",
+                loading: false,
+            })
+            // navigate("/login")
+        })
+    }
+
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -11,15 +59,28 @@ const Registration = () => {
                     <Headingforreglog className="headerreglog" title="Get started with easily register" />
                     <p>Free register and you can enjoy it</p>
                     <div className='regInput'>
-                        <TextField id="outlined-basic" label="Email Address" variant="outlined" />
+                        <TextField onChange={handleValues} name='email' type='email' id="outlined-basic" label="Email Address" variant="outlined" value={values.email} />
                     </div>
                     <div className='regInput'>
-                        <TextField id="outlined-basic" label="Ful name" variant="outlined" />
+                        <TextField onChange={handleValues} name='fullName' type='text' id="outlined-basic" label="Ful name" variant="outlined" value={values.fullName} />
                     </div>
                     <div className='regInput'>
-                        <TextField id="outlined-basic" label="Password" variant="outlined" />
+                        <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
                     </div>
-                    <Button className='btnsl' variant="contained">Sign up </Button>
+
+                    <Alert severity="info" style={{ marginBottom: "20px" }}>Have An Account? <strong><Link to="/login">Login</Link></strong></Alert>
+
+                    {values.loading
+                        ? <LoadingButton className='btnsl'
+                            loading
+                            loadingPosition="start"
+                            startIcon={<SaveIcon />}
+                            variant="outlined"
+                        >
+                            Loading
+                        </LoadingButton>
+                        : <Button onClick={handleSubmit} className='btnsl' variant="contained">Sign up </Button>
+                    }
                 </div>
             </Grid>
             <Grid item xs={6}>
