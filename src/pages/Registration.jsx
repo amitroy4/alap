@@ -90,19 +90,19 @@ const Registration = () => {
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='email' type='email' id="outlined-basic" label="Email Address" variant="outlined" value={values.email} />
                     </div>
-                    {values.error.includes("Email") && <Alert severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
+                    {values.error.includes("Email") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='fullName' type='text' id="outlined-basic" label="Full Name" variant="outlined" value={values.fullName} />
                     </div>
-                    {values.error.includes("Full") && <Alert severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
+                    {values.error.includes("Full") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
                     </div>
-                    {values.error.includes("Password") && <Alert severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
+                    {values.error.includes("Password") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
-                    <Alert severity="info" style={{ marginBottom: "20px" }}>Have An Account? <strong><Link to="/login">Login</Link></strong></Alert>
+                    <Alert className='warning-w' severity="info" style={{ marginBottom: "20px" }}>Have An Account? <strong><Link to="/login">Login</Link></strong></Alert>
 
                     {values.loading
                         ? <LoadingButton className='btnsl'
