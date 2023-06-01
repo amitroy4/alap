@@ -33,11 +33,16 @@
     width: 80%;
 }
 
-.google{
+.google {
     width: 30%;
     margin-top: 20px;
     cursor: pointer;
 }
-.css-1fuz9qr-MuiPaper-root-MuiAlert-root{
+
+.css-1fuz9qr-MuiPaper-root-MuiAlert-root {
+    width: 70%;
+}
+
+.css-1hdyuqk-MuiPaper-root-MuiAlert-root {
     width: 70%;
 }

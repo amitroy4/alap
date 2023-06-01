@@ -31,7 +31,7 @@ const Login = () => {
     }
 
     let handleSubmit = () => {
-        let { email, password, fullName } = values
+        let { email, password } = values
         setValues({
             ...values,
             loading: true,
