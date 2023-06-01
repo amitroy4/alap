@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 let initialValues = {
     email: "",
     password: "",
+    error: "",
     loading: false,
 }
 
@@ -32,6 +33,23 @@ const Login = () => {
 
     let handleSubmit = () => {
         let { email, password } = values
+
+        if (!email) {
+            setValues({
+                ...values,
+                error: "Enter an Email"
+            })
+            return
+        }
+
+        if (!password) {
+            setValues({
+                ...values,
+                error: "Enter Your Password"
+            })
+            return
+        }
+
         setValues({
             ...values,
             loading: true,
@@ -62,11 +80,14 @@ const Login = () => {
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='email' type='email' id="outlined-basic" label="Email Address" variant="outlined" value={values.email} />
                     </div>
+                    {values.error.includes("Email") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
+
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
                     </div>
+                    {values.error.includes("Password") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
-                    <Alert severity="info" style={{ marginBottom: "20px" }}>Don't Have An Account? <strong><Link to="/">Registration</Link></strong></Alert>
+                    <Alert className='warning-w' severity="info" style={{ marginBottom: "20px" }}>Don't Have An Account? <strong><Link to="/">Registration</Link></strong></Alert>
 
                     {values.loading
                         ? <LoadingButton className='btnsl'
