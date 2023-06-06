@@ -22,7 +22,17 @@ const Login = () => {
 
     const auth = getAuth();
 
-    const notify = (msg) => toast.success("Loged in to " + msg, {
+    const notify = (msg) => toast.success(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+    });
+    const wnotify = (msg) => toast.warn(msg, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -68,14 +78,18 @@ const Login = () => {
             ...values,
             loading: true,
         })
-        signInWithEmailAndPassword(auth, email, password).then(() => {
+        signInWithEmailAndPassword(auth, email, password).then((user) => {
             setValues({
                 email: "",
                 password: "",
                 loading: false,
             })
-            notify(values.email)
-            navigate("/home")
+            if (user.user.emailVerified) {
+                notify("Loged in to " + values.email)
+                navigate("/home")
+            } else {
+                wnotify("Please Varify Your Email For Login")
+            }
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;

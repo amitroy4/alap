@@ -79,7 +79,7 @@ const Registration = () => {
             sendEmailVerification(auth.currentUser)
                 .then(() => {
                     console.log("Email send")
-                });
+                })
 
             setValues({
                 email: "",
@@ -88,7 +88,21 @@ const Registration = () => {
                 loading: false,
             })
             navigate("/login")
-        })
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            if (errorCode.includes("email-already-in-use")) {
+                setValues({
+                    ...values,
+                    email: "",
+                    fullName: "",
+                    password: "",
+                    error: "Email Already In Use",
+                    loading: false,
+                })
+            }
+            console.log(error)
+        });
     }
 
 
