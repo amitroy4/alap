@@ -34,6 +34,7 @@ const Registration = () => {
     let handleSubmit = () => {
 
         let { email, password, fullName } = values
+        var pattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 
         if (!email) {
             setValues({
@@ -55,6 +56,15 @@ const Registration = () => {
             setValues({
                 ...values,
                 error: "Enter a Password"
+            })
+            return
+        }
+
+        if (!pattern.test(password)) {
+            setValues({
+                ...values,
+                error: "Password must be 6-20 characters consisting of numbers, uppercase and lowercase letters and characters!",
+                loading: false,
             })
             return
         }
@@ -101,7 +111,7 @@ const Registration = () => {
                     <div className='regInput'>
                         <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
                     </div>
-                    {values.error?.includes("Password") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
+                    {(values.error.includes("Password") || values.error.includes("Password must be 6-20 characters")) && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <Alert className='warning-w' severity="info" style={{ marginBottom: "20px" }}>Have An Account? <strong><Link to="/login">Login</Link></strong></Alert>
 
