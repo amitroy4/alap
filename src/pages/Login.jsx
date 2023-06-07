@@ -86,7 +86,7 @@ const Login = () => {
             })
             if (user.user.emailVerified) {
                 notify("Loged in to " + values.email)
-                navigate("/home")
+                navigate("/alap/home")
             } else {
                 wnotify("Please Varify Your Email For Login")
             }
@@ -130,7 +130,7 @@ const Login = () => {
     let handleGoogleLogin = () => {
         signInWithPopup(auth, provider).then((result) => {
             console.log(result)
-            navigate("/home")
+            navigate("/alap/home")
         })
     }
 
