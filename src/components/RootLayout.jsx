@@ -4,9 +4,27 @@ import Grid from '@mui/material/Grid';
 import profile from "../assets/profile.png"
 import { AiOutlineHome, AiFillMessage, AiOutlineSetting, AiOutlineLogout } from 'react-icons/ai'
 import { MdOutlineNotifications } from 'react-icons/md'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 
 const RootLayout = () => {
+
+    const auth = getAuth();
+    let navigate = useNavigate()
+    const location = useLocation()
+
+    let handleLogOut = () => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            navigate("/login")
+        }).catch((error) => {
+            // An error happened.
+        });
+    }
+
+
     return (
         <>
             <Grid container spacing={2}>
@@ -15,29 +33,29 @@ const RootLayout = () => {
                         <div className='navcontainer'>
                             <img src={profile} />
                             <ul>
-                                <li>
-                                    <Link to='/alap/home'>
-                                        <AiOutlineHome className='icon' />
+                                <li >
+                                    <Link to='/alap/home' className={location.pathname == "/alap/home" ? 'active' : 'icon'}>
+                                        <AiOutlineHome />
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/alap/message'>
-                                        <AiFillMessage className='icon' />
+                                    <Link to='/alap/message' className={location.pathname == "/alap/message" ? 'active' : 'icon'}>
+                                        <AiFillMessage />
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/alap/home'>
-                                        <MdOutlineNotifications className='icon' />
+                                    <Link to='/alap/' className={location.pathname == "/alap/" ? 'active' : 'icon'}>
+                                        <MdOutlineNotifications />
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/alap/home'>
-                                        <AiOutlineSetting className='icon' />
+                                    <Link to='/alap/' className={location.pathname == "/alap/" ? 'active' : 'icon'}>
+                                        <AiOutlineSetting />
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/alap/home'>
-                                        <AiOutlineLogout className='icon' />
+                                    <Link onClick={handleLogOut} className={location.pathname == "/alap/" ? 'active' : 'icon'}>
+                                        <AiOutlineLogout />
                                     </Link>
                                 </li>
 

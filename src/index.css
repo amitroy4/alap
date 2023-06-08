@@ -3,7 +3,8 @@
     padding: 0;
 }
 
-ul,ol{
+ul,
+ol {
     list-style: none;
 }
 
@@ -93,7 +94,43 @@ ul,ol{
 }
 
 .icon {
+    display: inline-block;
     color: #FFFFFFB2;
     font-size: 25px;
     margin: 30px 0;
+}
+
+.active {
+    display: inline-block;
+    color: #5F35F5;
+    font-size: 25px;
+    margin: 30px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.active:after {
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    background: white;
+    width: 260%;
+    height: 120%;
+    content: "";
+    z-index: -1;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.active::before {
+    position: absolute;
+    top: -5px;
+    right: -146%;
+    width: 5px;
+    height: 120%;
+    background: #5F35F5;
+    content: "";
+
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
