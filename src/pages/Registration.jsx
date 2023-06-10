@@ -4,7 +4,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
 import regimg from "../assets/regimg.png"
 import Headingforreglog from '../components/Headingforreglog';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { getDatabase, ref, set, push } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ let initialValues = {
 const Registration = () => {
 
     const auth = getAuth();
+    const db = getDatabase();
 
     let navigate = useNavigate();
 
@@ -76,10 +78,25 @@ const Registration = () => {
             loading: true,
         })
         createUserWithEmailAndPassword(auth, email, password).then((user) => {
-            sendEmailVerification(auth.currentUser)
-                .then(() => {
-                    console.log("Email send")
-                })
+
+            updateProfile(auth.currentUser, {
+                displayName: values.fullName, photoURL: "https://i.ibb.co/ZW7Qr66/avater.png"
+            }).then(() => {
+                sendEmailVerification(auth.currentUser)
+                    .then(() => {
+                        console.log("Email send")
+                        console.log(user)
+                        set(ref(db, 'users/'+user.user.uid), {
+                            username: values.fullName,
+                            email: values.email,
+                            profile_picture: user.user.photoURL
+                        });
+                    });
+            }).catch((error) => {
+                // An error occurred
+                // ...
+            });
+
 
             setValues({
                 email: "",
