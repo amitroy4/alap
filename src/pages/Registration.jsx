@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, TextField, Button, Alert } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -8,6 +8,7 @@ import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateP
 import { getDatabase, ref, set, push } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 let initialValues = {
     email: "",
@@ -18,12 +19,17 @@ let initialValues = {
 }
 
 const Registration = () => {
+    let loginUser = useSelector((state) => state.loggedUser.loginUser)
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (loginUser != null) {
+            navigate("/alap/home")
+        }
+    }, [])
 
     const auth = getAuth();
     const db = getDatabase();
-
-    let navigate = useNavigate();
-
     let [values, setValues] = useState(initialValues)
 
     let handleValues = (e) => {
@@ -86,7 +92,7 @@ const Registration = () => {
                     .then(() => {
                         console.log("Email send")
                         console.log(user)
-                        set(ref(db, 'users/'+user.user.uid), {
+                        set(ref(db, 'users/' + user.user.uid), {
                             username: values.fullName,
                             email: values.email,
                             profile_picture: user.user.photoURL

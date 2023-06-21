@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, TextField, Button, Alert } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -8,6 +8,9 @@ import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopu
 import Headingforreglog from '../components/Headingforreglog';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux'
+import { userdata } from '../slices/user/userSlice';
+import { useSelector } from 'react-redux';
 
 
 
@@ -19,8 +22,18 @@ let initialValues = {
 }
 
 const Login = () => {
+    let navigate = useNavigate()
+
+    let loginUser = useSelector((state) => state.loggedUser.loginUser)
+
+    useEffect(() => {
+        if (loginUser != null) {
+            navigate("/alap/home")
+        }
+    }, [])
 
     const auth = getAuth();
+    let dispatch = useDispatch();
 
     const notify = (msg) => toast.success(msg, {
         position: "top-right",
@@ -44,7 +57,7 @@ const Login = () => {
     });
 
     const provider = new GoogleAuthProvider();
-    let navigate = useNavigate()
+
 
     let [values, setValues] = useState(initialValues)
 
@@ -85,6 +98,8 @@ const Login = () => {
                 loading: false,
             })
             if (user.user.emailVerified) {
+                dispatch(userdata(user.user))
+                localStorage.setItem("alapUser", JSON.stringify(user.user))
                 notify("Loged in to " + values.email)
                 navigate("/alap/home")
             } else {

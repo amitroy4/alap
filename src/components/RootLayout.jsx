@@ -8,16 +8,21 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { userdata } from '../slices/user/userSlice';
 
 const RootLayout = () => {
 
     const auth = getAuth();
+    let dispatch = useDispatch()
     let navigate = useNavigate()
     const location = useLocation()
 
     let handleLogOut = () => {
         signOut(auth).then(() => {
             // Sign-out successful.
+            localStorage.removeItem("alapUser")
+            dispatch(userdata(null))
             navigate("/login")
         }).catch((error) => {
             // An error happened.
@@ -54,7 +59,7 @@ const RootLayout = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link onClick={handleLogOut} className={location.pathname == "/alap/" ? 'active' : 'icon'}>
+                                    <Link onClick={handleLogOut} className='icon'>
                                         <AiOutlineLogout />
                                     </Link>
                                 </li>
