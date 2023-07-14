@@ -208,3 +208,10 @@ ol {
     font-size: 14px;
     color: rgba(77, 77, 77, 0.75);
 }
+
+.username{
+    font-size: 18px;
+    margin-top: 10px;
+    color: white;
+    padding: 0 5px;
+}

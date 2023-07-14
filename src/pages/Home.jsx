@@ -45,7 +45,7 @@ const Home = () => {
                 <MyGroups />
             </Grid>
             <Grid item xs={4}>
-                {/* <UserList /> */}
+                <UserList />
                 <Block />
             </Grid>
         </Grid>

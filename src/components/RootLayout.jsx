@@ -10,6 +10,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { userdata } from '../slices/user/userSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 const RootLayout = () => {
 
@@ -17,6 +18,8 @@ const RootLayout = () => {
     let dispatch = useDispatch()
     let navigate = useNavigate()
     const location = useLocation()
+
+    let userData = useSelector((state) => state.loggedUser.loginUser)
 
     let handleLogOut = () => {
         signOut(auth).then(() => {
@@ -37,6 +40,7 @@ const RootLayout = () => {
                     <div className='navbar'>
                         <div className='navcontainer'>
                             <img src={profile} />
+                            <h4 className='username'>{userData.displayName}</h4>
                             <ul>
                                 <li >
                                     <Link to='/alap/home' className={location.pathname == "/alap/home" ? 'active' : 'icon'}>

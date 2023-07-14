@@ -3,6 +3,7 @@ import profile from '../assets/profile.png'
 import Button from '@mui/material/Button';
 import { getDatabase, ref, onValue, set, push, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 
 const UserList = () => {
@@ -10,6 +11,9 @@ const UserList = () => {
     const auth = getAuth();
     let [userList, setUserList] = useState([]);
     let [friendRequest, setFriendRequest] = useState([]);
+    let [friends, setFriends] = useState([]);
+
+    let userData = useSelector((state) => state.loggedUser.loginUser)
 
     useEffect(() => {
         const usersRef = ref(db, 'friendrequest/');
@@ -23,28 +27,41 @@ const UserList = () => {
     }, [])
 
     useEffect(() => {
+        const usersRef = ref(db, 'friends/');
+        onValue(usersRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach(item => {
+                arr.push(item.val().reciverid + item.val().senderid)
+            })
+            setFriends(arr)
+        });
+    }, [])
+
+    useEffect(() => {
         const usersRef = ref(db, 'users/');
         onValue(usersRef, (snapshot) => {
             let arr = []
             snapshot.forEach(item => {
-                arr.push({ ...item.val(), id: item.key })
+                if (userData.uid != item.key) {
+                    arr.push({ ...item.val(), id: item.key })
+                }
             })
             setUserList(arr)
         });
     }, [])
 
     let handleFriendRequest = (item) => {
-        set(ref(db, 'friendrequest/' + (auth.currentUser.uid + item.id)), {
+        set(ref(db, 'friendrequest/' + (userData.uid + item.id)), {
             sendername: auth.currentUser.displayName,
-            senderid: auth.currentUser.uid,
+            senderid: userData.uid,
             recivername: item.username,
             reciverid: item.id,
         });
     }
 
     let handleFriendRequestCancel = (item) => {
-        console.log(auth.currentUser.uid + item.id)
-        remove(ref(db, 'friendrequest/' + (auth.currentUser.uid + item.id)));
+        console.log(userData.uid + item.id)
+        remove(ref(db, 'friendrequest/' + (userData.uid + item.id)));
     }
 
 
@@ -68,9 +85,13 @@ const UserList = () => {
                         </div>
                         <div className='button'>
                             {
-                                friendRequest.includes(item.id + auth.currentUser.uid)
-                                    ? <Button onClick={() => handleFriendRequestCancel(item)} variant="contained" size="small">Cancel</Button>
-                                    : <Button onClick={() => handleFriendRequest(item)} variant="contained" size="small">Add</Button>
+                                friendRequest.includes(item.id + userData.uid)
+                                    ? (<Button onClick={() => handleFriendRequestCancel(item)} variant="contained" size="small">Cancel</Button>)
+                                    : friendRequest.includes(userData.uid + item.id)
+                                        ? (<Button variant="contained" size="small">Pending</Button>)
+                                        : friends.includes(item.id + userData.uid) || friends.includes(userData.uid + item.id)
+                                            ? (<Button variant="contained" size="small" color='success'>Frinds</Button>)
+                                            : (<Button onClick={() => handleFriendRequest(item)} variant="contained" size="small">Add</Button>)
                             }
 
                         </div>
