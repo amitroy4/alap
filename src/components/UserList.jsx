@@ -77,7 +77,7 @@ const UserList = () => {
                 {userList.map(item => (
                     <div className="list">
                         <div className='img'>
-                            <img src={profile} />
+                            <img src={item.profile_picture} />
                         </div>
                         <div className='details'>
                             <h4>{item.username}</h4>
