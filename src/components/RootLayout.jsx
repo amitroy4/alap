@@ -39,7 +39,7 @@ const RootLayout = () => {
                 <Grid item xs={1}>
                     <div className='navbar'>
                         <div className='navcontainer'>
-                            <img src={profile} />
+                            <img src={userData.photoURL} />
                             <h4 className='username'>{userData.displayName}</h4>
                             <ul>
                                 <li >

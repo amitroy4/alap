@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux'
 import { userdata } from '../slices/user/userSlice';
 import { useSelector } from 'react-redux';
+import { getDatabase, ref, set, push } from "firebase/database";
 
 
 
@@ -22,6 +23,7 @@ let initialValues = {
 }
 
 const Login = () => {
+    const db = getDatabase();
     let navigate = useNavigate()
 
     let loginUser = useSelector((state) => state.loggedUser.loginUser)
@@ -100,7 +102,7 @@ const Login = () => {
             if (user.user.emailVerified) {
                 dispatch(userdata(user.user))
                 localStorage.setItem("alapUser", JSON.stringify(user.user))
-                notify("Loged in to " + values.email)
+                notify("Loged in to " + user.user.displayName)
                 navigate("/alap/home")
             } else {
                 wnotify("Please Varify Your Email For Login")
@@ -143,8 +145,16 @@ const Login = () => {
     }
 
     let handleGoogleLogin = () => {
-        signInWithPopup(auth, provider).then((result) => {
-            console.log(result)
+        signInWithPopup(auth, provider).then((user) => {
+            set(ref(db, 'users/' + user.user.uid), {
+                username: user.user.displayName,
+                email: user.user.email,
+                profile_picture: user.user.photoURL
+            });
+            dispatch(userdata(user.user))
+            localStorage.setItem("alapUser", JSON.stringify(user.user))
+            console.log(user.user.uid);
+            notify("Loged in to " + user.user.displayName)
             navigate("/alap/home")
         })
     }
