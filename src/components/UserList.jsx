@@ -12,6 +12,7 @@ const UserList = () => {
     let [userList, setUserList] = useState([]);
     let [friendRequest, setFriendRequest] = useState([]);
     let [friends, setFriends] = useState([]);
+    let [block, setBlock] = useState([]);
 
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
@@ -23,6 +24,17 @@ const UserList = () => {
                 arr.push(item.val().reciverid + item.val().senderid)
             })
             setFriendRequest(arr)
+        });
+    }, [])
+
+    useEffect(() => {
+        const usersRef = ref(db, 'block/');
+        onValue(usersRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach(item => {
+                arr.push(item.val().blockreciverid + item.val().blocksenderid)
+            })
+            setBlock(arr)
         });
     }, [])
 
@@ -90,8 +102,10 @@ const UserList = () => {
                                     : friendRequest.includes(userData.uid + item.id)
                                         ? (<Button variant="contained" size="small">Pending</Button>)
                                         : friends.includes(item.id + userData.uid) || friends.includes(userData.uid + item.id)
-                                            ? (<Button variant="contained" size="small" color='success'>Frinds</Button>)
-                                            : (<Button onClick={() => handleFriendRequest(item)} variant="contained" size="small">Add</Button>)
+                                            ? (<Button variant="contained" size="small" color='success'>Friends</Button>)
+                                            : block.includes(item.id + userData.uid) || block.includes(userData.uid + item.id)
+                                                ? (<Button variant="contained" size="small" color='error'>Block</Button>)
+                                                : (<Button onClick={() => handleFriendRequest(item)} variant="contained" size="small">Add</Button>)
                             }
 
                         </div>

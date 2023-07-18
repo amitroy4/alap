@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import profile from '../assets/profile.png'
 import Button from '@mui/material/Button';
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, remove } from "firebase/database";
 import { useSelector } from 'react-redux';
 
 
@@ -34,6 +34,11 @@ const Block = () => {
         });
     }, [])
 
+
+    let handleUnblock = (item) => {
+        remove(ref(db, 'block/' + item.id));
+    }
+
     return (
         <div className='box'>
             <div className='titlebox'>
@@ -57,9 +62,9 @@ const Block = () => {
                             </div>
                             {
                                 userData.uid == item.blocksenderid
-                                && 
+                                &&
                                 <div className='button'>
-                                    <Button variant="contained" size="small">Unblock</Button>
+                                    <Button onClick={() => handleUnblock(item)} variant="contained" size="small">Unblock</Button>
                                 </div>
                             }
                         </div>
