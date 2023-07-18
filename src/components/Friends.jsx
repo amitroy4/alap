@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import profile from '../assets/profile.png'
 import Button from '@mui/material/Button';
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, set, ref, onValue, remove, push } from "firebase/database";
 import { useSelector } from 'react-redux';
 
 const Friends = () => {
     const db = getDatabase();
     let userData = useSelector((state) => state.loggedUser.loginUser)
+
     let [friends, setFriends] = useState([])
     useEffect(() => {
 
@@ -15,9 +16,6 @@ const Friends = () => {
         onValue(friendsRef, (snapshot) => {
             let arr = []
             snapshot.forEach(item => {
-                // console.log('user id', userData.uid);
-                // console.log('Sender id', item.val().senderid);
-                // console.log('reciver id', item.val().reciverid);
                 if (
                     item.val().senderid == userData.uid ||
                     item.val().reciverid == userData.uid
@@ -27,8 +25,35 @@ const Friends = () => {
             });
             setFriends(arr)
         });
-        console.log(friends)
     }, [])
+
+    let handleBlock = (item) => {
+        if (userData.uid == item.senderid) {
+            set(push(ref(db, "block/")), {
+                blockrecivername: item.recivername,
+                blockreciverid: item.reciverid,
+                blocksendername: item.sendername,
+                blocksenderid: item.senderid,
+            }).then(() => {
+                remove(ref(db, "friends/" + item.id));
+            })
+        } else {
+            set(push(ref(db, "block/")), {
+                blockrecivername: item.sendername,
+                blockreciverid: item.senderid,
+                blocksendername: item.recivername,
+                blocksenderid: item.reciverid,
+            }).then(() => {
+                remove(ref(db, "friends/" + item.id));
+            })
+        }
+    }
+
+    let handleUnfriend = (item) => {
+        remove(ref(db, "friends/" + item.id));
+    }
+
+
     return (
         <div className='box'>
             <div className='titlebox'>
@@ -36,7 +61,7 @@ const Friends = () => {
             </div>
             <div className='listbox'>
                 {
-                    friends.map((item) => ( 
+                    friends.map((item) => (
                         <div className="list">
                             <div className='img'>
                                 <img src={profile} />
@@ -44,15 +69,16 @@ const Friends = () => {
                             <div className='details'>
                                 {
                                     item.reciverid == userData.uid
-                                    ?
-                                    <h4>{item.sendername}</h4>
-                                    :
-                                    <h4>{item.recivername}</h4>
+                                        ?
+                                        <h4>{item.sendername}</h4>
+                                        :
+                                        <h4>{item.recivername}</h4>
                                 }
                                 <p>Hi Guys, Wassup!</p>
                             </div>
                             <div className='button'>
-                                <Button variant="contained" size="small">Join</Button>
+                                <Button onClick={() => handleBlock(item)} variant="contained" size="small">Block</Button>
+                                <Button onClick={() => handleUnfriend(item)} variant="contained" size="small" color='error'>Unfrnd</Button>
                             </div>
                         </div>
                     ))
