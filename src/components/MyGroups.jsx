@@ -41,7 +41,7 @@ const MyGroups = () => {
                             </div>
                             <div className='details'>
                                 <h4>{item.groupname}</h4>
-                                <p>Hi Guys, Wassup!</p>
+                                <p>{item.grouptagline}</p>
                             </div>
                             <div className='button'>
                                 <Button variant="contained" size="small">Join</Button>

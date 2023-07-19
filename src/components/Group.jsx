@@ -82,7 +82,7 @@ const Group = () => {
         onValue(groupsRef, (snapshot) => {
             let arr = []
             snapshot.forEach(item => {
-                if (userData.uid != item.val().adminid){
+                if (userData.uid != item.val().adminid) {
 
                     arr.push({
                         ...item.val(),
@@ -136,7 +136,7 @@ const Group = () => {
                             </div>
                             <div className='details'>
                                 <h4>{item.groupname}</h4>
-                                <p>Hi Guys, Wassup!</p>
+                                <p>{item.grouptagline}</p>
                             </div>
                             <div className='button'>
                                 <Button variant="contained" size="small">Join</Button>
