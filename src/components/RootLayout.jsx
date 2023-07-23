@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Grid from '@mui/material/Grid';
 import profile from "../assets/profile.png"
@@ -20,6 +20,16 @@ const RootLayout = () => {
     const location = useLocation()
 
     let userData = useSelector((state) => state.loggedUser.loginUser)
+
+    useEffect(() => {
+        if (userData == null) {
+            navigate("/login")
+        }
+    }, [])
+
+    if (userData == null) {
+        return
+    }
 
     let handleLogOut = () => {
         signOut(auth).then(() => {

@@ -9,6 +9,7 @@ import { getDatabase, ref, set, push } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { BsEyeSlash, BsEye } from 'react-icons/bs';
 
 let initialValues = {
     email: "",
@@ -21,12 +22,17 @@ let initialValues = {
 const Registration = () => {
     let loginUser = useSelector((state) => state.loggedUser.loginUser)
     let navigate = useNavigate();
+    let [eye, setEye] = useState(false)
 
     useEffect(() => {
         if (loginUser != null) {
             navigate("/alap/home")
         }
     }, [])
+
+    let handleEye = () => {
+        setEye(!eye)
+    }
 
     const auth = getAuth();
     const db = getDatabase();
@@ -146,8 +152,15 @@ const Registration = () => {
                     {values.error?.includes("Full") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <div className='regInput'>
-                        <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
+                        <TextField onChange={handleValues} name='password' type={eye ? "text" : 'password'} id="outlined-basic" label="Password" variant="outlined" value={values.password} />
+                        {
+                            eye ?
+                                <BsEyeSlash onClick={handleEye} className='eye' />
+                                :
+                                <BsEye onClick={handleEye} className='eye' />
+                        }
                     </div>
+
                     {(values.error.includes("Password") || values.error.includes("Password must be 6-20 characters")) && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <Alert className='warning-w' severity="info" style={{ marginBottom: "20px" }}>Have An Account? <strong><Link to="/login">Login</Link></strong></Alert>

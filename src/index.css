@@ -209,9 +209,27 @@ ol {
     color: rgba(77, 77, 77, 0.75);
 }
 
-.username{
+.username {
     font-size: 18px;
     margin-top: 10px;
     color: white;
     padding: 0 5px;
+}
+
+.regInput {
+    position: relative;
+}
+
+.eye {
+    margin-right: 50px;
+    position: absolute;
+    top: 20px;
+    left: 70%;
+    color: #C4C4C4;
+    transition: all linear 0.4s;
+}
+
+.eye:hover {
+    cursor: pointer;
+    color: #000000;
 }

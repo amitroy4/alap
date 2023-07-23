@@ -28,7 +28,7 @@ const Home = () => {
     // let handleLogOut = () => {
     //     signOut(auth).then(() => {
     //         // Sign-out successful.
-            
+
     //         navigate("/login")
     //     }).catch((error) => {
     //         // An error happened.

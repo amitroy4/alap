@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { userdata } from '../slices/user/userSlice';
 import { useSelector } from 'react-redux';
 import { getDatabase, ref, set, push } from "firebase/database";
+import { BsEyeSlash, BsEye } from 'react-icons/bs';
 
 
 
@@ -25,6 +26,7 @@ let initialValues = {
 const Login = () => {
     const db = getDatabase();
     let navigate = useNavigate()
+    let [eye, setEye] = useState(false)
 
     let loginUser = useSelector((state) => state.loggedUser.loginUser)
 
@@ -33,6 +35,10 @@ const Login = () => {
             navigate("/alap/home")
         }
     }, [])
+
+    let handleEye = () => {
+        setEye(!eye)
+    }
 
     const auth = getAuth();
     let dispatch = useDispatch();
@@ -171,7 +177,13 @@ const Login = () => {
                     {(values.error?.includes("Email") || values.error?.includes("User Not Found")) && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
                     <div className='regInput'>
-                        <TextField onChange={handleValues} name='password' type='password' id="outlined-basic" label="Password" variant="outlined" value={values.password} />
+                        <TextField onChange={handleValues} name='password' type={eye ? "text" : 'password'} id="outlined-basic" label="Password" variant="outlined" value={values.password} />
+                        {
+                            eye ?
+                                <BsEyeSlash onClick={handleEye} className='eye' />
+                                :
+                                <BsEye onClick={handleEye} className='eye' />
+                        }
                     </div>
                     {values.error?.includes("Password") && <Alert className='warning-w' severity="error" style={{ marginBottom: "20px" }}>{values.error}</Alert>}
 
