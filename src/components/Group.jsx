@@ -42,6 +42,7 @@ const Group = () => {
 
     let [groupInfo, setGroupInfo] = useState(groupData)
     let [groupList, setGroupList] = useState([])
+    let [groupMemberList, setGroupMemberList] = useState([])
 
     let handleChange = (e) => {
         setGroupInfo({
@@ -85,11 +86,37 @@ const Group = () => {
                 if (userData.uid != item.val().adminid) {
 
                     arr.push({
-                        ...item.val(),
+                        ...item.val(), groupid: item.key
                     });
                 }
             })
             setGroupList(arr)
+        });
+    }, [])
+
+
+    let handleGroupJoin = (item) => {
+        set(push(ref(db, 'grouprequest/')), {
+            adminid: item.adminid,
+            adminname: item.adminname,
+            groupid: item.groupid,
+            groupname: item.groupname,
+            userid: userData.uid,
+            username: userData.displayName,
+        })
+    }
+
+    useEffect(() => {
+        const groupsRef = ref(db, 'grouprequest/');
+        onValue(groupsRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach(item => {
+                if (item.val().userid == userData.uid) {
+
+                    arr.push(item.val().groupid);
+                }
+            })
+            setGroupMemberList(arr)
         });
     }, [])
 
@@ -135,11 +162,16 @@ const Group = () => {
                                 <img src={profile} />
                             </div>
                             <div className='details'>
+                                <p style={{ fontSize: "12px" }}>Admin: {item.adminname}</p>
                                 <h4>{item.groupname}</h4>
                                 <p>{item.grouptagline}</p>
                             </div>
                             <div className='button'>
-                                <Button variant="contained" size="small">Join</Button>
+                                {groupMemberList.indexOf(item.groupid) != -1 ?
+                                    <Button variant="contained" size="small">Request Send</Button>
+                                    :
+                                    <Button onClick={() => handleGroupJoin(item)} variant="contained" size="small">Join</Button>
+                                }
                             </div>
                         </div>
                     ))
