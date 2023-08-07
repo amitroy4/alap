@@ -2,9 +2,21 @@ import React, { useEffect, useState } from 'react'
 import profile from '../assets/profile.png'
 import { Button, Box, Typography, Modal, List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { getDatabase, ref, onValue, remove, set, push } from "firebase/database";
 
 const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
+const style2 = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -20,8 +32,31 @@ const MyGroups = () => {
     const db = getDatabase();
     let [groupList, setGroupList] = useState([])
     let [groupReqList, setGroupReqList] = useState([])
+    let [myMembersList, setMyMembersList] = useState([])
 
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
+
+    let userData = useSelector((state) => state.loggedUser.loginUser)
+
+    const handleOpen2 = (member) => {
+        const groupsRef = ref(db, 'members/');
+        onValue(groupsRef, (snapshot) => {
+            let arr = []
+            snapshot.forEach(item => {
+                if (userData.uid == item.val().adminid && item.val().groupid == member.groupid) {
+                    arr.push({
+                        ...item.val(),
+                        memberid: item.key,
+                    });
+                }
+            })
+            setMyMembersList(arr)
+        });
+        setOpen2(true)
+    };
+    const handleClose2 = () => setOpen2(false);
+
     const handleOpen = (group) => {
         const groupsRef = ref(db, 'grouprequest/');
         onValue(groupsRef, (snapshot) => {
@@ -40,7 +75,6 @@ const MyGroups = () => {
     }
     const handleClose = () => setOpen(false);
 
-    let userData = useSelector((state) => state.loggedUser.loginUser)
 
     useEffect(() => {
         const groupsRef = ref(db, 'groups/');
@@ -59,6 +93,15 @@ const MyGroups = () => {
 
     let handleGroupDelete = (item) => {
         remove(ref(db, 'grouprequest/' + (item.groupreqid)));
+    }
+
+    let handleMemberAccept = (item) => {
+        console.log(item);
+        set(push(ref(db, 'members/')), {
+            ...item
+        }).then(() => {
+            remove(ref(db, 'grouprequest/' + (item.groupreqid)));
+        });
     }
 
     return (
@@ -84,12 +127,12 @@ const MyGroups = () => {
                             </div>
                             <div className='button'>
                                 <Button onClick={() => handleOpen(item)} variant="contained" size="small">Request</Button>
-                                <Button variant="contained" size="small" color='success'>Member</Button>
+                                <Button onClick={() => handleOpen2(item)} variant="contained" size="small" color='success'>Member</Button>
                             </div>
                         </div>
                     ))
                 }
-
+                {/* ======================== Modal for Group Request Start ======================== */}
                 <Modal
                     open={open}
                     onClose={handleClose}
@@ -121,7 +164,7 @@ const MyGroups = () => {
                                                         </Typography>
                                                         {" — Wants to join your group."}
                                                         <br />
-                                                        <Button variant="contained" size="small" color='success' style={{ marginTop: "10px", marginBottom: "10px" }}>Accept</Button>
+                                                        <Button onClick={() => handleMemberAccept(item)} variant="contained" size="small" color='success' style={{ marginTop: "10px", marginBottom: "10px" }}>Accept</Button>
                                                         <Button onClick={() => handleGroupDelete(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Delete</Button>
                                                     </React.Fragment>
 
@@ -135,6 +178,56 @@ const MyGroups = () => {
                         </Typography>
                     </Box>
                 </Modal>
+                {/* ======================== Modal for Group Request End ======================== */}
+
+                {/* ======================== Modal for Group Member Start ======================== */}
+                <div>
+                    <Modal
+                        open={open2}
+                        onClose={handleClose2}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style2}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                Group Members
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                    {myMembersList.map(item => (
+                                        <>
+                                            <ListItem alignItems="flex-start">
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={item.username}
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            <Typography
+                                                                sx={{ display: 'inline' }}
+                                                                component="span"
+                                                                variant="body2"
+                                                                color="text.primary"
+                                                            >
+                                                            </Typography>
+                                                            {" — Wants to join your group."}
+                                                            <br />
+                                                            <Button onClick={() => handleGroupDelete(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Remove</Button>
+                                                        </React.Fragment>
+
+                                                    }
+                                                />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                        </>
+                                    ))}
+                                </List>
+                            </Typography>
+                        </Box>
+                    </Modal>
+                </div>
+                {/* ======================== Modal for Group Member End ======================== */}
 
             </div>
         </div>
