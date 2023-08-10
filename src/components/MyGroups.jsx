@@ -92,9 +92,11 @@ const MyGroups = () => {
     }, [])
 
     let handleGroupDelete = (item) => {
-        confirm('Are you sure you want to remove ' + item.username + '?');
+        if(confirm('Are you sure you want to remove ' + item.username + '?')){
+
+            remove(ref(db, 'members/' + (item.memberid)));
+        }
         console.log(item);
-        remove(ref(db, 'members/' + (item.memberid)));
     }
 
     let handleMemberAccept = (item) => {
