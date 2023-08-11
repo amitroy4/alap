@@ -91,12 +91,16 @@ const MyGroups = () => {
         });
     }, [])
 
-    let handleGroupDelete = (item) => {
-        if(confirm('Are you sure you want to remove ' + item.username + '?')){
+    let handleMemberRemove = (item) => {
+        if (confirm('Are you sure you want to remove ' + item.username + '?')) {
 
             remove(ref(db, 'members/' + (item.memberid)));
         }
         console.log(item);
+    }
+
+    let handleMemberDelete = (item) => {
+        remove(ref(db, 'grouprequest/' + (item.groupreqid)));
     }
 
     let handleMemberAccept = (item) => {
@@ -169,7 +173,7 @@ const MyGroups = () => {
                                                         {" — Wants to join your group."}
                                                         <br />
                                                         <Button onClick={() => handleMemberAccept(item)} variant="contained" size="small" color='success' style={{ marginTop: "10px", marginBottom: "10px" }}>Accept</Button>
-                                                        <Button onClick={() => handleGroupDelete(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Delete</Button>
+                                                        <Button onClick={() => handleMemberDelete(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Delete</Button>
                                                     </React.Fragment>
 
                                                 }
@@ -217,7 +221,7 @@ const MyGroups = () => {
                                                             </Typography>
                                                             {" — Wants to join your group."}
                                                             <br />
-                                                            <Button onClick={() => handleGroupDelete(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Remove</Button>
+                                                            <Button onClick={() => handleMemberRemove(item)} variant="contained" size="small" color='error' style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px" }}>Remove</Button>
                                                         </React.Fragment>
 
                                                     }
