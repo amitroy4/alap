@@ -7,7 +7,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useSelector } from 'react-redux';
 
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, onValue,remove } from "firebase/database";
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -40,7 +40,8 @@ const Group = () => {
     const handleClose = () => setOpen(false);
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
-    let [groupInfo, setGroupInfo] = useState(groupData)
+    let [groupCancel, setGroupCancel] = useState('')
+    let [groupInfo , setGroupInfo] = useState([])
     let [groupList, setGroupList] = useState([])
     let [groupMemberList, setGroupMemberList] = useState([])
     let [membersList, setMembersList] = useState([])
@@ -133,6 +134,19 @@ const Group = () => {
         });
     }, [])
 
+    let handleGroupCancel = (cancel)=>{
+        const groupsRef = ref(db, 'grouprequest/');
+        onValue(groupsRef, (snapshot) => {
+            snapshot.forEach(item => {
+                if (item.val().groupid == cancel.groupid && item.val().userid == userData.uid) {
+                    setGroupCancel(item.key)
+                }
+            })
+        });
+        remove(ref(db, "grouprequest/" + groupCancel));
+
+    }
+
     return (
         <div className='box'>
             <div className='titlebox'>
@@ -181,7 +195,10 @@ const Group = () => {
                             </div>
                             <div className='button'>
                                 {groupMemberList.indexOf(item.groupid) != -1 ?
+                                    <>
                                     <Button variant="contained" size="small">Request Send</Button>
+                                    <Button onClick={() => handleGroupCancel(item)} variant="contained" size="small">Cancel</Button>
+                                    </>
                                     : membersList.includes(item.groupid) ?
                                         <Button variant="contained" size="small">Joined</Button>
                                         :
