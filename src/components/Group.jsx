@@ -40,7 +40,6 @@ const Group = () => {
     const handleClose = () => setOpen(false);
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
-    let [groupCancel, setGroupCancel] = useState('')
     let [groupInfo , setGroupInfo] = useState([])
     let [groupList, setGroupList] = useState([])
     let [groupMemberList, setGroupMemberList] = useState([])
@@ -136,10 +135,11 @@ const Group = () => {
 
     let handleGroupCancel = (cancel)=>{
         const groupsRef = ref(db, 'grouprequest/');
+        let groupCancel = "";
         onValue(groupsRef, (snapshot) => {
             snapshot.forEach(item => {
                 if (item.val().groupid == cancel.groupid && item.val().userid == userData.uid) {
-                    setGroupCancel(item.key)
+                    groupCancel = item.key;
                 }
             })
         });

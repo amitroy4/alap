@@ -46,23 +46,25 @@ const FriendRequest = () => {
             <div className='listbox'>
                 {
                     friendRequestList.length
-                        ? <>{
-                            friendRequestList.map(item => (
-                                <div className="list">
-                                    <div className='img'>
-                                        <img src={profile} />
+                        ? <>
+                            {
+                                friendRequestList.map(item => (
+                                    <div className="list">
+                                        <div className='img'>
+                                            <img src={profile} />
+                                        </div>
+                                        <div className='details'>
+                                            <h4>{item.sendername}</h4>
+                                            <p>Hi Guys, Wassup!</p>
+                                        </div>
+                                        <div className='button'>
+                                            <Button onClick={() => handleAcceptFriendRequest(item)} variant="contained" size="small">Accept</Button>
+                                            <Button onClick={() => handleReject(item.id)} variant="contained" size="small" color='error'>Reject</Button>
+                                        </div>
                                     </div>
-                                    <div className='details'>
-                                        <h4>{item.sendername}</h4>
-                                        <p>Hi Guys, Wassup!</p>
-                                    </div>
-                                    <div className='button'>
-                                        <Button onClick={() => handleAcceptFriendRequest(item)} variant="contained" size="small">Accept</Button>
-                                        <Button onClick={() => handleReject(item.id)} variant="contained" size="small" color='error'>Reject</Button>
-                                    </div>
-                                </div>
-                            ))
-                        }</>
+                                ))
+                            }
+                        </>
                         : <h3>No Friend Request</h3>
                 }
 

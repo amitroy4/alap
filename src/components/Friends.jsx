@@ -61,28 +61,36 @@ const Friends = () => {
             </div>
             <div className='listbox'>
                 {
-                    friends.map((item) => (
-                        <div className="list">
-                            <div className='img'>
-                                <img src={profile} />
-                            </div>
-                            <div className='details'>
-                                {
-                                    item.reciverid == userData.uid
-                                        ?
-                                        <h4>{item.sendername}</h4>
-                                        :
-                                        <h4>{item.recivername}</h4>
-                                }
-                                <p>Hi Guys, Wassup!</p>
-                            </div>
-                            <div className='button'>
-                                <Button onClick={() => handleBlock(item)} variant="contained" size="small">Block</Button>
-                                <Button onClick={() => handleUnfriend(item)} variant="contained" size="small" color='error'>Unfrnd</Button>
-                            </div>
-                        </div>
-                    ))
+                    friends.length ?
+                        <>
+                            {
+                                friends.map((item) => (
+                                    <div className="list">
+                                        <div className='img'>
+                                            <img src={profile} />
+                                        </div>
+                                        <div className='details'>
+                                            {
+                                                item.reciverid == userData.uid
+                                                    ?
+                                                    <h4>{item.sendername}</h4>
+                                                    :
+                                                    <h4>{item.recivername}</h4>
+                                            }
+                                            <p>Hi Guys, Wassup!</p>
+                                        </div>
+                                        <div className='button'>
+                                            <Button onClick={() => handleBlock(item)} variant="contained" size="small">Block</Button>
+                                            <Button onClick={() => handleUnfriend(item)} variant="contained" size="small" color='error'>Unfrnd</Button>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </>
+                        : <h3>No Friends</h3>
+
                 }
+
 
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Button } from '@mui/material';
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Group from '../components/Group';
@@ -23,17 +23,6 @@ const Home = () => {
         }
     }, [])
 
-
-
-    // let handleLogOut = () => {
-    //     signOut(auth).then(() => {
-    //         // Sign-out successful.
-
-    //         navigate("/login")
-    //     }).catch((error) => {
-    //         // An error happened.
-    //     });
-    // }
     return (
         <Grid container spacing={2}>
             <Grid item xs={4}>
@@ -49,7 +38,6 @@ const Home = () => {
                 <Block />
             </Grid>
         </Grid>
-        // <Button onClick={handleLogOut} variant="contained">Log Out</Button>
     )
 }
 
