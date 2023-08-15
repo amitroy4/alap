@@ -34,7 +34,6 @@ const Group = () => {
     const db = getDatabase();
     const [loader, setLoader] = useState(false);
     const [error, setError] = useState("");
-    const [alreadymemberList, setAlreadymemberList] = useState("");
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -126,14 +125,12 @@ const Group = () => {
         const membersRef = ref(db, 'members/');
         onValue(membersRef, (snapshot) => {
             let arr = []
-            let alreadyarr = []
             snapshot.forEach(item => {
-                arr.push(item.val().groupid);
-                alreadyarr.push(item.val().userid)
+                if (item.val().userid == userData.uid) {
+                    arr.push(item.val().groupid);
+                }
             })
             setMembersList(arr)
-            setAlreadymemberList(alreadyarr)
-            // console.log(arr);
         });
     }, [])
 
@@ -203,7 +200,7 @@ const Group = () => {
                                         <Button variant="contained" size="small">Request Send</Button>
                                         <Button onClick={() => handleGroupCancel(item)} variant="contained" size="small">Cancel</Button>
                                     </>
-                                    : membersList.includes(item.groupid) && alreadymemberList.includes(userData.uid) ?
+                                    : membersList.indexOf(item.groupid) != -1 ?
                                         <Button variant="contained" size="small">Joined</Button>
                                         :
                                         <Button onClick={() => handleGroupJoin(item)} variant="contained" size="small">Join</Button>
