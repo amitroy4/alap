@@ -13,9 +13,21 @@ const MessageGroup = () => {
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
     useEffect(() => {
-        const groupsRef = ref(db, 'members/');
+
+        const groupsRef = ref(db, 'groups/');
+        let arr = []
         onValue(groupsRef, (snapshot) => {
-            let arr = []
+            snapshot.forEach(item => {
+                if (userData.uid == item.val().adminid) {
+                    arr.push({
+                        ...item.val(), groupid: item.key,
+                    });
+                }
+            })
+        });
+
+        const membersRef = ref(db, 'members/');
+        onValue(membersRef, (snapshot) => {
             snapshot.forEach(item => {
                 if (userData.uid == item.val().adminid || userData.uid == item.val().userid) {
                     arr.push({
@@ -23,9 +35,11 @@ const MessageGroup = () => {
                     });
                 }
             })
-            setGroupList(arr)
+            setGroupList(arr);
         });
     }, [])
+
+
     return (
         <div className='box'>
             <div className='titlebox'>

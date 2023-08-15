@@ -7,7 +7,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { useSelector } from 'react-redux';
 
-import { getDatabase, ref, set, push, onValue,remove } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, remove } from "firebase/database";
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -34,13 +34,14 @@ const Group = () => {
     const db = getDatabase();
     const [loader, setLoader] = useState(false);
     const [error, setError] = useState("");
+    const [alreadymemberList, setAlreadymemberList] = useState("");
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
-    let [groupInfo , setGroupInfo] = useState([])
+    let [groupInfo, setGroupInfo] = useState([])
     let [groupList, setGroupList] = useState([])
     let [groupMemberList, setGroupMemberList] = useState([])
     let [membersList, setMembersList] = useState([])
@@ -125,15 +126,18 @@ const Group = () => {
         const membersRef = ref(db, 'members/');
         onValue(membersRef, (snapshot) => {
             let arr = []
+            let alreadyarr = []
             snapshot.forEach(item => {
                 arr.push(item.val().groupid);
+                alreadyarr.push(item.val().userid)
             })
             setMembersList(arr)
+            setAlreadymemberList(alreadyarr)
             // console.log(arr);
         });
     }, [])
 
-    let handleGroupCancel = (cancel)=>{
+    let handleGroupCancel = (cancel) => {
         const groupsRef = ref(db, 'grouprequest/');
         let groupCancel = "";
         onValue(groupsRef, (snapshot) => {
@@ -196,10 +200,10 @@ const Group = () => {
                             <div className='button'>
                                 {groupMemberList.indexOf(item.groupid) != -1 ?
                                     <>
-                                    <Button variant="contained" size="small">Request Send</Button>
-                                    <Button onClick={() => handleGroupCancel(item)} variant="contained" size="small">Cancel</Button>
+                                        <Button variant="contained" size="small">Request Send</Button>
+                                        <Button onClick={() => handleGroupCancel(item)} variant="contained" size="small">Cancel</Button>
                                     </>
-                                    : membersList.includes(item.groupid) ?
+                                    : membersList.includes(item.groupid) && alreadymemberList.includes(userData.uid) ?
                                         <Button variant="contained" size="small">Joined</Button>
                                         :
                                         <Button onClick={() => handleGroupJoin(item)} variant="contained" size="small">Join</Button>
