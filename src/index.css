@@ -233,3 +233,82 @@ ol {
     cursor: pointer;
     color: #000000;
 }
+
+
+.chatbox {
+    width: 90%;
+    border-radius: 25px;
+    -webkit-box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    box-sizing: border-box;
+    margin: auto;
+    height: 90vh;
+}
+
+
+.msgprofile {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.25);
+}
+
+.signal {
+    position: relative;
+}
+
+.round {
+    width: 13px;
+    height: 13px;
+    background: #00FF75;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 4px;
+    right: 5px;
+    -webkit-box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 34px 7px rgba(0, 0, 0, 0.1);
+}
+
+.msgbox {
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.msg {
+    display: flex;
+    flex-direction: column;
+}
+
+.getmsg {
+    background: #f1f1f1;
+    display: inline-block;
+    padding: 12px 52px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin: 10px 0;
+    align-self: flex-start;
+}
+
+.sendmsg {
+    background: #5F35F5;
+    display: inline-block;
+    padding: 12px 52px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: white;
+    align-self: flex-end;
+}
+
+.time {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.sendmsg+.time {
+    color: rgba(0, 0, 0, 0.65);
+    align-self: flex-end;
+}
