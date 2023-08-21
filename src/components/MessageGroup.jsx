@@ -29,7 +29,7 @@ const MessageGroup = () => {
         const membersRef = ref(db, 'members/');
         onValue(membersRef, (snapshot) => {
             snapshot.forEach(item => {
-                if (userData.uid == item.val().adminid || userData.uid == item.val().userid) {
+                if (userData.uid != item.val().adminid || userData.uid == item.val().userid) {
                     arr.push({
                         ...item.val(), groupid: item.key,
                     });
