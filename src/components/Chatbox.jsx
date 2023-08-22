@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import profile from "../assets/profile.png"
 import regimg from "../assets/regimg.png"
 import ModalImage from "react-modal-image";
@@ -7,6 +7,10 @@ import { useSelector } from 'react-redux';
 
 const Chatbox = () => {
     let activeChat = useSelector((state) => state.activeChat.activeChat)
+    let [check, setCheck] = useState(true)
+    if (activeChat == null) {
+        return
+    }
     return (
         <div className='chatbox'>
             <div className='msgprofile'>
