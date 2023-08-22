@@ -1,5 +1,8 @@
 import React from 'react'
 import profile from "../assets/profile.png"
+import regimg from "../assets/regimg.png"
+import ModalImage from "react-modal-image";
+import Button from '@mui/material/Button';
 
 const Chatbox = () => {
     return (
@@ -23,22 +26,57 @@ const Chatbox = () => {
                     <p className='sendmsg'>Hello Anik, from Dhaka</p>
                     <p className='time'>Today, 2:01pm</p>
                 </div>
+
+
                 <div className='msg'>
-                    <p className='getmsg'>Hello Anik, from Dhaka</p>
+                    <p className='getimg'>
+                        <ModalImage
+                            small={regimg}
+                            large={regimg}
+                        />
+                    </p>
                     <p className='time'>Today, 2:01pm</p>
                 </div>
                 <div className='msg'>
-                    <p className='sendmsg'>Hello Anik, from Dhaka</p>
+                    <p className='sendimg'>
+                        <ModalImage
+                            small={regimg}
+                            large={regimg}
+                        />
+                    </p>
+                    <p className='time'>Today, 2:01pm</p>
+                </div>
+
+
+
+                <div className='msg'>
+                    <p className='getaudio'>
+                        <audio controls></audio>
+                    </p>
                     <p className='time'>Today, 2:01pm</p>
                 </div>
                 <div className='msg'>
-                    <p className='getmsg'>Hello Anik, from Dhaka</p>
+                    <p className='sendaudio'>
+                        <audio controls></audio>
+                    </p>
+                    <p className='time'>Today, 2:01pm</p>
+                </div>
+
+
+                <div className='msg'>
+                    <p className='getaudio'>
+                        <video width="320" height="240" controls></video>
+                    </p>
                     <p className='time'>Today, 2:01pm</p>
                 </div>
                 <div className='msg'>
-                    <p className='sendmsg'>Hello Anik, from Dhaka</p>
+                    <p className='sendaudio'>
+                        <video width="320" height="240" controls></video>
+                    </p>
                     <p className='time'>Today, 2:01pm</p>
                 </div>
+
+
                 <div className='msg'>
                     <p className='getmsg'>Hello Anik, from Dhaka</p>
                     <p className='time'>Today, 2:01pm</p>
@@ -64,8 +102,11 @@ const Chatbox = () => {
                     <p className='time'>Today, 2:01pm</p>
                 </div>
             </div>
-            <div>
-                box
+            <div className='msgcopntainer'>
+                <div className='msgwritecon' >
+                    <input className='msgwrite' />
+                </div>
+                <Button variant="contained">Contained</Button>
             </div>
         </div>
     )
