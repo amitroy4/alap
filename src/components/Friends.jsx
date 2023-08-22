@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import profile from '../assets/profile.png'
 import Button from '@mui/material/Button';
 import { getDatabase, set, ref, onValue, remove, push } from "firebase/database";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { activeChat } from '../slices/activechat/ActiveChat';
 
-const Friends = () => {
+const Friends = ({ button }) => {
     const db = getDatabase();
     let userData = useSelector((state) => state.loggedUser.loginUser)
 
     let [friends, setFriends] = useState([])
+
+    let dispatch = useDispatch()
+
     useEffect(() => {
 
         const friendsRef = ref(db, 'friends/');
@@ -53,6 +57,22 @@ const Friends = () => {
         remove(ref(db, "friends/" + item.id));
     }
 
+    let handleMsg = (item) => {
+        if (item.senderid == userData.uid) {
+            dispatch(activeChat({
+                type: "singlemsg",
+                name: item.recivername,
+                id: item.reciverid,
+            }))
+        } else {
+            dispatch(activeChat({
+                type: "singlemsg",
+                name: item.sendername,
+                id: item.senderid,
+            }))
+        }
+    }
+
 
     return (
         <div className='box'>
@@ -80,8 +100,15 @@ const Friends = () => {
                                             <p>Hi Guys, Wassup!</p>
                                         </div>
                                         <div className='button'>
-                                            <Button onClick={() => handleBlock(item)} variant="contained" size="small">Block</Button>
-                                            <Button onClick={() => handleUnfriend(item)} variant="contained" size="small" color='error'>Unfrnd</Button>
+                                            {
+                                                button == "msg"
+                                                    ? <Button onClick={() => handleMsg(item)} variant="contained" size="small">Message</Button>
+                                                    : <>
+                                                        <Button onClick={() => handleBlock(item)} variant="contained" size="small">Block</Button>
+                                                        <Button onClick={() => handleUnfriend(item)} variant="contained" size="small" color='error'>Unfrnd</Button>
+                                                    </>
+                                            }
+
                                         </div>
                                     </div>
                                 ))

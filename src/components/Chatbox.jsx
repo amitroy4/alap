@@ -3,8 +3,10 @@ import profile from "../assets/profile.png"
 import regimg from "../assets/regimg.png"
 import ModalImage from "react-modal-image";
 import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 
 const Chatbox = () => {
+    let activeChat = useSelector((state) => state.activeChat.activeChat)
     return (
         <div className='chatbox'>
             <div className='msgprofile'>
@@ -13,7 +15,7 @@ const Chatbox = () => {
                     <div className='round'></div>
                 </div>
                 <div>
-                    <h3>Amit ROy</h3>
+                    <h3>{activeChat.name}</h3>
                     <p>Online </p>
                 </div>
             </div>

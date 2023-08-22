@@ -10,7 +10,6 @@ export const counterSlice = createSlice({
     reducers: {
         userdata: (state, action) => {
             state.loginUser = action.payload
-            console.log(state.loginUser);
         },
     },
 })
