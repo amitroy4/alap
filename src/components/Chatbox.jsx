@@ -7,9 +7,10 @@ import { useSelector } from 'react-redux';
 
 const Chatbox = () => {
     let activeChat = useSelector((state) => state.activeChat.activeChat)
-    let [check, setCheck] = useState(true)
-    if (activeChat == null) {
-        return
+    let userData = useSelector((state) => state.loggedUser.loginUser)
+    let [msg, setMsg] = useState("")
+    let handleChat = () => {
+
     }
     return (
         <div className='chatbox'>
@@ -110,9 +111,9 @@ const Chatbox = () => {
             </div>
             <div className='msgcopntainer'>
                 <div className='msgwritecon' >
-                    <input className='msgwrite' />
+                    <input onChange={(e) => setMsg(e.target.value)} className='msgwrite' />
                 </div>
-                <Button variant="contained">Contained</Button>
+                <Button onClick={handleChat} variant="contained">Send</Button>
             </div>
         </div>
     )

@@ -28,6 +28,29 @@ const Friends = ({ button }) => {
                 }
             });
             setFriends(arr)
+            if (arr[0].senderid == userData.uid) {
+                // dispatch(activeChat({
+                //     type: "singlemsg",
+                //     name: arr[0].recivername,
+                //     id: arr[0].reciverid,
+                // }))
+                localStorage.setItem("activeChat", JSON.stringify({
+                    type: "singlemsg",
+                    name: arr[0].recivername,
+                    id: arr[0].reciverid,
+                }))
+            } else {
+                // dispatch(activeChat({
+                //     type: "singlemsg",
+                //     name: arr[0].sendername,
+                //     id: arr[0].senderid,
+                // }))
+                localStorage.setItem("activeChat", JSON.stringify({
+                    type: "singlemsg",
+                    name: arr[0].sendername,
+                    id: arr[0].senderid,
+                }))
+            }
         });
     }, [])
 
