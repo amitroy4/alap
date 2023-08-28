@@ -64,8 +64,18 @@ const Friends = ({ button }) => {
                 name: item.recivername,
                 id: item.reciverid,
             }))
+            localStorage.setItem("activeChat", JSON.stringify({
+                type: "singlemsg",
+                name: item.recivername,
+                id: item.reciverid,
+            }))
         } else {
             dispatch(activeChat({
+                type: "singlemsg",
+                name: item.sendername,
+                id: item.senderid,
+            }))
+            localStorage.setItem("activeChat", JSON.stringify({
                 type: "singlemsg",
                 name: item.sendername,
                 id: item.senderid,
