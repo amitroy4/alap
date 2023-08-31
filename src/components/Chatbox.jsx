@@ -13,10 +13,24 @@ const Chatbox = () => {
     let userData = useSelector((state) => state.loggedUser.loginUser)
     let [msg, setMsg] = useState("")
     let [msgList, setMsgList] = useState([])
+    let [groupMsgList, setGroupMsgList] = useState([])
+
+
     let handleChat = () => {
         console.log(activeChat);
         if (activeChat.type == "groupmsg") {
-
+            if (msg != "") {
+                set(push(ref(db, 'groupmsg/')), {
+                    sendername: userData.displayName,
+                    senderid: userData.uid,
+                    recievername: activeChat.name,
+                    recieverid: activeChat.id,
+                    msg: msg,
+                    date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                }).then(() => {
+                    setMsg("")
+                });
+            }
         } else {
             if (msg != "") {
                 set(push(ref(db, 'singlemsg/')), {
@@ -26,6 +40,8 @@ const Chatbox = () => {
                     recieverid: activeChat.id,
                     msg: msg,
                     date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                }).then(() => {
+                    setMsg("")
                 });
             }
         }
@@ -41,7 +57,60 @@ const Chatbox = () => {
             });
             setMsgList(arr)
         });
-    }, [])
+    }, [activeChat.id])
+
+
+    useEffect(() => {
+        onValue(ref(db, 'groupmsg/'), (snapshot) => {
+            let arr = []
+            snapshot.forEach(item => {
+                if (item.val().senderid == userData.uid && item.val().recieverid == activeChat.id || item.val().senderid == activeChat.id && item.val().recieverid == userData.uid) {
+                    arr.push(item.val())
+                }
+            });
+            setGroupMsgList(arr)
+        });
+    }, [activeChat.id])
+
+
+    let handleMsg = (e) => {
+        setMsg(e.target.value)
+    }
+
+    let handleKeyPress = (e) => {
+        if (e.key == "Enter") {
+            if (activeChat.type == "groupmsg") {
+                if (msg != "") {
+                    set(push(ref(db, 'groupmsg/')), {
+                        sendername: userData.displayName,
+                        senderid: userData.uid,
+                        recievername: activeChat.name,
+                        recieverid: activeChat.id,
+                        msg: msg,
+                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                    }).then(() => {
+                        setMsg("")
+                    });
+                }
+            } else {
+                if (msg != "") {
+                    set(push(ref(db, 'singlemsg/')), {
+                        sendername: userData.displayName,
+                        senderid: userData.uid,
+                        recievername: activeChat.name,
+                        recieverid: activeChat.id,
+                        msg: msg,
+                        date: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`,
+                    }).then(() => {
+                        setMsg("")
+                    });
+                }
+            }
+        }
+    }
+
+
+
     return (
         <div className='chatbox'>
             <div className='msgprofile'>
@@ -55,19 +124,37 @@ const Chatbox = () => {
                 </div>
             </div>
             <div className='msgbox'>
-                {msgList.map(item => (
-                    item.senderid == userData.uid
-                        ?
-                        <div className='msg'>
-                            <p className='sendmsg'>{item.msg}</p>
-                            <p className='time'>{moment("2023-08-31 02:59", "YYYYMMDD hh:mm").fromNow()}</p>
-                        </div>
-                        :
-                        <div className='msg'>
-                            <p className='getmsg'>{item.msg}</p>
-                            <p className='time'>{moment("2023-08-31 02:59", "YYYYMMDD hh:mm").fromNow()}</p>
-                        </div>
-                ))}
+                {activeChat.type == "singlemsg" ?
+                    msgList.map(item => (
+                        item.senderid == userData.uid && item.recieverid == activeChat.id
+                            ?
+                            <div className='msg'>
+                                <p className='sendmsg'>{item.msg}</p>
+                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                            :
+                            item.senderid == activeChat.id && item.recieverid == userData.uid &&
+                            <div className='msg'>
+                                <p className='getmsg'>{item.msg}</p>
+                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                    ))
+                    :
+                    groupMsgList.map(item => (
+                        item.senderid == userData.uid && item.recieverid == activeChat.id
+                            ?
+                            <div className='msg'>
+                                <p className='sendmsg'>{item.msg}</p>
+                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                            :
+                            item.senderid == activeChat.id && item.recieverid == userData.uid &&
+                            <div className='msg'>
+                                <p className='getmsg'>{item.msg}</p>
+                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                            </div>
+                    ))
+                }
 
 
 
@@ -122,7 +209,7 @@ const Chatbox = () => {
             </div>
             <div className='msgcopntainer'>
                 <div className='msgwritecon' >
-                    <input onChange={(e) => setMsg(e.target.value)} className='msgwrite' />
+                    <input onChange={handleMsg} className='msgwrite' onKeyUp={handleKeyPress} value={msg} />
                 </div>
                 <Button onClick={handleChat} variant="contained">Send</Button>
             </div>

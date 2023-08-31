@@ -291,6 +291,8 @@ ol {
     font-weight: bold;
     margin: 10px 0;
     align-self: flex-start;
+    max-width: 90%;
+    word-wrap: break-word;
 }
 
 
@@ -328,6 +330,8 @@ ol {
     margin: 10px 0;
     color: white;
     align-self: flex-end;
+    max-width: 90%;
+    word-wrap: break-word;
 }
 
 
