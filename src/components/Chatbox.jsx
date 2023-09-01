@@ -64,7 +64,7 @@ const Chatbox = () => {
         onValue(ref(db, 'groupmsg/'), (snapshot) => {
             let arr = []
             snapshot.forEach(item => {
-                if (item.val().senderid == userData.uid && item.val().recieverid == activeChat.id || item.val().senderid == activeChat.id && item.val().recieverid == userData.uid) {
+                if (item.val().senderid == userData.uid && item.val().recieverid == activeChat.id || item.val().senderid != userData.uid && item.val().recieverid == activeChat.id) {
                     arr.push(item.val())
                 }
             });
@@ -141,17 +141,16 @@ const Chatbox = () => {
                     ))
                     :
                     groupMsgList.map(item => (
-                        item.senderid == userData.uid && item.recieverid == activeChat.id
+                        item.senderid == userData.uid
                             ?
                             <div className='msg'>
                                 <p className='sendmsg'>{item.msg}</p>
                                 <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                             </div>
                             :
-                            item.senderid == activeChat.id && item.recieverid == userData.uid &&
                             <div className='msg'>
                                 <p className='getmsg'>{item.msg}</p>
-                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                <p className='time'>{item.sendername} at {moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
                             </div>
                     ))
                 }
