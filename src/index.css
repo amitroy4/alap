@@ -316,7 +316,6 @@ ol {
 }
 
 .getimg>div {
-    width: 100%;
     height: 100%;
 }
 
@@ -362,7 +361,6 @@ ol {
 }
 
 .sendimg>div {
-    width: 100%;
     height: 100%;
 }
 
@@ -375,14 +373,12 @@ ol {
 .getaudio {
     display: inline-block;
     margin: 10px 0;
-    color: white;
     align-self: flex-start;
 }
 
 .sendaudio {
     display: inline-block;
     margin: 10px 0;
-    color: white;
     align-self: flex-end;
 }
 
@@ -403,6 +399,7 @@ ol {
 .msgwritecon {
     width: 85%;
     border-radius: 10px;
+    position: relative;
 }
 
 
@@ -411,4 +408,27 @@ ol {
     justify-content: space-between;
     padding: 25px 0;
     border-top: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.emojiholder {
+    position: absolute;
+    bottom: 47px;
+    right: 0;
+}
+
+.audiocontainer {
+    position: absolute;
+    top: -2px;
+    right: -36px;
+    width: 105%;
+    z-index: 1;
+}
+
+.audio-recorder {
+    position: absolute;
+    top: 4px;
+    right: 50px;
+    z-index: 1;
+    background-color: transparent !important;
+    box-shadow: 0 2px 5px transparent !important;
 }
