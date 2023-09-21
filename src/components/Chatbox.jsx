@@ -20,6 +20,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import EmojiPicker from "emoji-picker-react";
 import { AudioRecorder } from "react-audio-voice-recorder";
+import ScrollableFeed from 'react-scrollable-feed'
 
 
 function LinearProgressWithLabel(props) {
@@ -287,82 +288,84 @@ const Chatbox = () => {
                     <p>Online </p>
                 </div>
             </div>
-            <div className='msgbox'>
-                {activeChat.type == "singlemsg" ?
-                    msgList.map(item => (
-                        item.senderid == userData.uid && item.recieverid == activeChat.id
-                            ?
-                            <div className='msg'>
-                                {item.msg ? (
-                                    <p className="sendmsg">{item.msg}</p>
-                                ) : item.img ? (
-                                    <p className="sendimg">
-                                        <ModalImage small={item.img} large={item.img} />
-                                    </p>
-                                ) : item.audio ? (<p className='sendaudio'>
-                                    <audio src={item.audio} controls></audio>
-                                </p>) : (<p className='sendaudio'>
-                                    <video src={item.video} width="320" height="240" controls></video>
-                                </p>)}
-                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
-                            </div>
-                            :
-                            item.senderid == activeChat.id && item.recieverid == userData.uid &&
-                            <div className='msg'>
-                                {item.msg ? (
-                                    <p className="getmsg">{item.msg}</p>
-                                ) : item.img ? (
-                                    <p className="getimg">
-                                        <ModalImage small={item.img} large={item.img} />
-                                    </p>
-                                ) : item.audio ? (<p className='getaudio'>
-                                    <audio src={item.audio} controls></audio>
-                                </p>) : (<p className='getaudio'>
-                                    <video src={item.video} width="320" height="240" controls></video>
-                                </p>)}
-                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
-                            </div>
-                    ))
-                    :
-                    groupMsgList.map(item => (
-                        item.senderid == userData.uid && item.recieverid == activeChat.id
-                            ?
-                            <div className='msg'>
-                                {item.msg ? (
-                                    <p className="sendmsg">{item.msg}</p>
-                                ) : item.img ? (
-                                    <p className="sendimg">
-                                        <ModalImage small={item.img} large={item.img} />
-                                    </p>
-                                ) : item.audio ? (<p className='sendaudio'>
-                                    <audio src={item.audio} controls></audio>
-                                </p>) : (<p className='sendaudio'>
-                                    <video src={item.video} width="320" height="240" controls></video>
-                                </p>)}
-                                <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
-                            </div>
-                            : item.recieverid == activeChat.id &&
-                            <div className='msg'>
-                                {item.msg ? (
-                                    <p className="getmsg">{item.msg}</p>
-                                ) : item.img ? (
-                                    <p className="getimg">
-                                        <ModalImage small={item.img} large={item.img} />
-                                    </p>
-                                ) : item.audio ? (<p className='getaudio'>
-                                    <audio src={item.audio} controls></audio>
-                                </p>) : (<p className='getaudio'>
-                                    <video src={item.video} width="320" height="240" controls></video>
-                                </p>)}
-                                <p className='time'>{item.sendername}, {moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
-                            </div>
-                    ))
-                }
+                <div className='msgbox'>
+                <ScrollableFeed>
+                    {activeChat.type == "singlemsg" ?
+                        msgList.map(item => (
+                            item.senderid == userData.uid && item.recieverid == activeChat.id
+                                ?
+                                <div className='msg'>
+                                    {item.msg ? (
+                                        <p className="sendmsg">{item.msg}</p>
+                                    ) : item.img ? (
+                                        <p className="sendimg">
+                                            <ModalImage small={item.img} large={item.img} />
+                                        </p>
+                                    ) : item.audio ? (<p className='sendaudio'>
+                                        <audio src={item.audio} controls></audio>
+                                    </p>) : (<p className='sendaudio'>
+                                        <video src={item.video} width="320" height="240" controls></video>
+                                    </p>)}
+                                    <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                </div>
+                                :
+                                item.senderid == activeChat.id && item.recieverid == userData.uid &&
+                                <div className='msg'>
+                                    {item.msg ? (
+                                        <p className="getmsg">{item.msg}</p>
+                                    ) : item.img ? (
+                                        <p className="getimg">
+                                            <ModalImage small={item.img} large={item.img} />
+                                        </p>
+                                    ) : item.audio ? (<p className='getaudio'>
+                                        <audio src={item.audio} controls></audio>
+                                    </p>) : (<p className='getaudio'>
+                                        <video src={item.video} width="320" height="240" controls></video>
+                                    </p>)}
+                                    <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                </div>
+                        ))
+                        :
+                        groupMsgList.map(item => (
+                            item.senderid == userData.uid && item.recieverid == activeChat.id
+                                ?
+                                <div className='msg'>
+                                    {item.msg ? (
+                                        <p className="sendmsg">{item.msg}</p>
+                                    ) : item.img ? (
+                                        <p className="sendimg">
+                                            <ModalImage small={item.img} large={item.img} />
+                                        </p>
+                                    ) : item.audio ? (<p className='sendaudio'>
+                                        <audio src={item.audio} controls></audio>
+                                    </p>) : (<p className='sendaudio'>
+                                        <video src={item.video} width="320" height="240" controls></video>
+                                    </p>)}
+                                    <p className='time'>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                </div>
+                                : item.recieverid == activeChat.id &&
+                                <div className='msg'>
+                                    {item.msg ? (
+                                        <p className="getmsg">{item.msg}</p>
+                                    ) : item.img ? (
+                                        <p className="getimg">
+                                            <ModalImage small={item.img} large={item.img} />
+                                        </p>
+                                    ) : item.audio ? (<p className='getaudio'>
+                                        <audio src={item.audio} controls></audio>
+                                    </p>) : (<p className='getaudio'>
+                                        <video src={item.video} width="320" height="240" controls></video>
+                                    </p>)}
+                                    <p className='time'>{item.sendername}, {moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                                </div>
+                        ))
+                    }
+                                </ScrollableFeed>
 
 
 
 
-                {/* <div className='msg'>
+                    {/* <div className='msg'>
                     <p className='getimg'>
                         <ModalImage
                             small={regimg}
@@ -383,7 +386,7 @@ const Chatbox = () => {
 
 
 
-                {/* <div className='msg'>
+                    {/* <div className='msg'>
                     <p className='getaudio'>
                         <audio controls></audio>
                     </p>
@@ -397,7 +400,7 @@ const Chatbox = () => {
                 </div> */}
 
 
-                {/* <div className='msg'>
+                    {/* <div className='msg'>
                     <p className='getaudio'>
                         <video width="320" height="240" controls></video>
                     </p>
@@ -409,7 +412,7 @@ const Chatbox = () => {
                     </p>
                     <p className='time'>Today, 2:01pm</p>
                 </div> */}
-            </div>
+                </div>
             <div className='msgcopntainer'>
                 <div className='msgwritecon' >
                     <input onChange={handleMsg} className='msgwrite' onKeyUp={handleKeyPress} value={msg} />

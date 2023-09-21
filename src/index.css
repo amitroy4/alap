@@ -12,7 +12,7 @@ ol {
     background: #000;
 }
 
-.darktext{
+.darktext {
     color: white;
 }
 
@@ -172,7 +172,7 @@ ol {
     border-bottom: 1px solid black;
 }
 
-.dark .list{
+.dark .list {
     border-bottom: 1px solid rgb(255, 255, 255);
 }
 
@@ -222,9 +222,10 @@ ol {
     font-size: 18px;
 }
 
-.dark .box p{
+.dark .box p {
     color: #f1f1f1;
 }
+
 .box p {
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
@@ -284,17 +285,18 @@ ol {
     border-bottom: 2px solid rgba(0, 0, 0, 0.25);
 }
 
-.dark .msgprofile{
+.dark .msgprofile {
     border-bottom: 2px solid rgba(255, 255, 255, 0.7);
 }
 
-.dark .msgprofile h3{
+.dark .msgprofile h3 {
     color: #f1f1f1;
 }
 
-.dark .msgprofile p{
+.dark .msgprofile p {
     color: #f1f1f1;
 }
+
 .signal {
     position: relative;
 }
@@ -315,7 +317,6 @@ ol {
 
 .msgbox {
     height: 80vh;
-    overflow-y: scroll;
 }
 
 .msg {
